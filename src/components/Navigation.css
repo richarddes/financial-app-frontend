@@ -1,0 +1,76 @@
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 45px;
+  height: 100vh;
+  background-color: var(--default-color);
+  color: white;
+  transition: width .3s ease-out;
+  z-index: 10;
+}
+
+.extended {
+  width: 200PX;
+}
+
+#extendedMenuButton {
+  position: relative;
+  width: 45px;
+  height: 40px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#extendedMenuButton > div {
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  transition: transform .3s;
+}
+
+#extendedMenuButton > div:nth-child(2) {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  transition: opacity .3s;
+}
+
+.active-cross > div:nth-child(2) {
+  opacity: 0;
+}
+
+.active-cross > div:nth-child(1) {
+  transform: rotate(135deg) translate(10px, -4px);
+}
+
+.active-cross > div:nth-child(3) {
+  transform: rotate(45deg) translate(-6px, 1px);
+}
+
+#links > a {
+  width: 100%;
+  color: white;
+  text-decoration: none;
+}
+
+#links > a > div:hover, .row {
+  background-color: var(--active-background);
+}
+
+#links > a > div {
+  height: 40px;
+  padding: 12.5px;
+}
+
+#links > a > div > img {
+  float: left;
+}
+
+#links > a > div > h5 {
+  margin: 0;
+  float: right;
+}
+
+.active {
+  background-color: var(--default-hover);
+}

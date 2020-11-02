@@ -1,0 +1,9 @@
+.newsInfo {
+  padding: 20px;
+  padding-top: 5px;
+}
+
+.newsInfo > h5 {
+  margin: 0;
+  margin-bottom: 5px;
+}

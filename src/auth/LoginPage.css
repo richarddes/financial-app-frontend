@@ -1,0 +1,8 @@
+#reset-pwd {
+  cursor: pointer;
+  transition: color .3s;
+}
+
+#reset-pwd:hover, #reset-pwd:focus {
+  color: var(--blue);
+}

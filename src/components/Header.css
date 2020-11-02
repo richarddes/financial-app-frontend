@@ -1,0 +1,15 @@
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 40px;
+  width: 100%;
+  padding: 15px;
+  background-color: white;
+}
+
+#heading-txt {
+  font-size: .75em;
+  font-weight: lighter;
+  margin-left: 40px;
+}

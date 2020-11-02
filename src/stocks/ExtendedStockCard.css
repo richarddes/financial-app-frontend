@@ -1,0 +1,13 @@
+#extendedStockCard {
+  position: relative;
+}
+
+#extendedStockCard > div > h3, #extendedStockCard > div > h4 {
+  display: inline-block;
+}
+
+#chart {
+  width: 100%;
+  height: 400px;
+  margin: 20px auto;
+}

@@ -1,0 +1,22 @@
+#box {
+  width: 50%;
+  border: var(--default-border);
+  padding: 10px;
+  margin-top: 5px;
+}
+
+#box > input {
+  margin: 5px auto;
+}
+
+@media screen and (max-width: 1300px) {
+  #box {
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  #box {
+    width: 100%;
+  }
+}
