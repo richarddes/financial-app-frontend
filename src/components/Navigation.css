@@ -10,8 +10,25 @@ nav {
   z-index: 10;
 }
 
-.extended {
-  width: 200PX;
+.navigation-enter {
+  width: 45px;
+}
+.navigation-enter-active {
+  width: 200px;
+  transition: width 200ms ease-out;
+}
+.navigation-enter-done {
+  width: 200px;
+}
+.navigation-exit {
+  width: 200px;
+}
+.navigation-exit-active {
+  width: 45px;
+  transition: width 200ms ease-out;
+}
+.navigation-exit-done {
+  width: 45px;
 }
 
 #extendedMenuButton {

@@ -2,6 +2,7 @@
 
 import io from "socket.io-client";
 import ChartWorker from "worker-loader!./ChartFetchWorker";
+import { apiFetch } from "../../utils/utils";
 
 const socket = io("https://ws-api.iextrading.com/1.0/last");
 
@@ -11,7 +12,7 @@ const cw = new ChartWorker();
 
 async function fetchRoute(stockDisplayOpt: string): Promise<any> {
   return new Promise((resolve) => {
-    fetch(`/api/stocks/opt/${stockDisplayOpt}`)
+    apiFetch(`/stocks/opt/${stockDisplayOpt}`)
       .then((res) => res.json())
       .then((data) => {
         ctx.postMessage(["fetchData", data]);

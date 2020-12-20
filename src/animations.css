@@ -1,0 +1,82 @@
+.halfFade-enter {
+  opacity: 0;
+}
+.halfFade-enter-active {
+  opacity: .5;
+  transition: opacity 200ms ease-out;
+}
+.halfFade-enter-done {
+  opacity: .5;
+}
+.halfFade-exit {
+  opacity: .5;
+}
+.halfFade-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+.halfFade-exit-done {
+  opacity: 0;
+}
+
+.fullFade-enter {
+  opacity: 0;
+}
+.fullFade-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-out;
+}
+.fullFade-enter-done {
+  opacity: 1;
+}
+.fullFade-exit {
+  opacity: 1;
+}
+.fullFade-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+.fullFade-exit-done {
+  opacity: 0;
+}
+
+.fromTop-enter {
+  transform: translateY(-115%);
+}
+.fromTop-enter-active {
+  transform: translateY(0%);
+  transition: transform 200ms ease-out;
+}
+.fromTop-enter-done {
+  transform: translateY(0%);
+}
+.fromTop-exit {
+  transform: translateY(0%);
+}
+.fromTop-exit-active {
+  transform: translateY(-115%);
+  transition: transform 200ms ease-in;
+}
+.fromTop-exit-active {
+  transform: translateY(-115%);
+}
+
+.scaleUp-enter {
+  opacity: 0;
+  transform: scale(0.2);
+}
+.scaleUp-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-out;
+}
+.scaleUp-enter-done {
+  opacity: 1;
+}
+.scaleUp-exit {
+  opacity: 1;
+}
+.scaleUp-exit-active {
+  opacity: 0;
+  transform: scale(0.2);
+  transition: opacity 200ms ease-out;
+}

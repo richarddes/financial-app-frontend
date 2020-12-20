@@ -5,6 +5,7 @@ import Modal from "../components/Modal"
 import "./AccountPage.css";
 import { apiFetch, isSuccess } from "../utils/utils";
 import { PageName } from "../types";
+import { CSSTransition } from "react-transition-group";
 
 type Language = "en" | "de";
 
@@ -69,7 +70,7 @@ export default function AccountPage(props: {
     <div className="container max-container">
       <span>
         News Language:
-        <select style={{marginLeft: 15}} value={lang} onChange={e => changeLang(e.target.value as Language)}>
+        <select style={{ marginLeft: 15 }} value={lang} onChange={e => changeLang(e.target.value as Language)}>
           <option value="en">English</option>
           <option value="de">Deutsch</option>
         </select>
@@ -87,16 +88,14 @@ export default function AccountPage(props: {
       <button className="danger-btn" onClick={() => {
         setDisplayModal(true);
       }}>Delete Account</button>
-      {displayModal &&
-        <Modal>
-          Do you really want to delete your account? <br />
-          <button className="danger-btn" onClick={() => {
-            setDisplayModal(false);
-            deleteAccount();
-          }}>Delete</button>
-          <button onClick={() => setDisplayModal(false)}>Cancel</button>
-        </Modal>
-      }
+      <Modal isOpen={displayModal}>
+        Do you really want to delete your account? <br />
+        <button className="danger-btn" onClick={() => {
+          setDisplayModal(false);
+          deleteAccount();
+        }}>Delete</button>
+        <button onClick={() => setDisplayModal(false)}>Cancel</button>
+      </Modal>
     </div>
   );
 }

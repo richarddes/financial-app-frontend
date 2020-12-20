@@ -6,6 +6,7 @@ import BackgroundInfo from "../components/BackgroundInfo";
 import { AuthContext } from "../auth/auth";
 import { apiFetch, isSuccess } from "../utils/utils";
 import { PageName } from "../types";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 interface StockCardPageProps {
   boughtStocksPage: boolean,
@@ -16,6 +17,7 @@ interface StockCardPageProps {
 export default function StockCardPage(props: StockCardPageProps): JSX.Element {
   const [stocksData, setStocksData] = useState<{ data: any, chart: any }>({ data: [], chart: {} });
   const [displayedStockOpt, setDisplayedStockOpt] = useState<string>("Gainers");
+  const [infoTxt, setInfoTxt] = useState<string>("");
   // realtimePrice is an array of form [symbol, price]. Every time a new price is recieved from
   // the web worker, this state is updated and passed on to every child component.
   // This logic will change at some point. 
@@ -25,16 +27,6 @@ export default function StockCardPage(props: StockCardPageProps): JSX.Element {
   const auth = useContext(AuthContext);
 
   useEffect(() => {
-    if (props.boughtStocksPage) {
-      props.setPageName("Your Stocks")
-    } else {
-      props.setPageName("Browse Stocks");
-    }
-  }, [props.boughtStocksPage])
-
-  useEffect(() => {
-    const priceWorker = new WorkerClient();
-
     apiFetch("/users/cash")
       .then((res: Response) => {
         if (isSuccess(res.status)) {
@@ -44,22 +36,41 @@ export default function StockCardPage(props: StockCardPageProps): JSX.Element {
           return;
         }
       })
-      .then((cash: string) => props.setCash(cash as unknown as number));
+      .then((cash: any) => props.setCash(cash));
+  }, [])
+
+  useEffect(() => {
+    const priceWorker = new WorkerClient();
 
     if (props.boughtStocksPage) {
+      props.setPageName("Your Stocks");
+
       apiFetch("/users/owned-stocks")
         .then((res: Response) => {
           if (isSuccess(res.status)) {
             return res.json();
-          } else if (res.status === 401) {
-            auth.toggleAuth();
-            return;
           } else {
-            setFetchStatus(res.status);
+            if (res.status === 401) {
+              auth.toggleAuth();
+              return;
+            } else {
+              setFetchStatus(res.status);
+              setInfoTxt(`There has been an error while fetching the news. Status code ${fetchStatus}`);
+            }
           }
         })
         .then((stocks: any) => {
+          if (!stocks) {
+            setInfoTxt("You haven't bought any stocks yet");
+            return;
+          }
+
           setStocksData({ data: stocks.data, chart: {} });
+
+          if (stocksData.data.length < 1) {
+            setInfoTxt("You haven't bought any stocks yet");
+            return;
+          }
 
           const symbols = Array.from(stocks.data, (stock: any) => stock.symbol);
 
@@ -72,13 +83,17 @@ export default function StockCardPage(props: StockCardPageProps): JSX.Element {
               setStocksData({ data: stocks.data, chart: message.data[1] });
             }
           }
-        })
+        });
     } else {
+      props.setPageName("Browse Stocks");
+
       priceWorker.worker.postMessage({ boughtStocksPage: false, option: displayedStockOpt });
 
       priceWorker.worker.onmessage = (message: MessageEvent) => {
         if (message.data[0] === "fetchData") {
           setStocksData(message.data[1]);
+
+          if (stocksData.data.length < 1) setInfoTxt("There's no stock data to be fetched");
         } else if (message.data[0] === "socketData") {
           setRealtimePrice(message.data[1]);
         }
@@ -86,7 +101,7 @@ export default function StockCardPage(props: StockCardPageProps): JSX.Element {
     }
 
     return () => priceWorker.worker.terminate();
-  }, [displayedStockOpt, props.boughtStocksPage])
+  }, [props.boughtStocksPage, displayedStockOpt]);
 
   return (
     <>
@@ -95,28 +110,17 @@ export default function StockCardPage(props: StockCardPageProps): JSX.Element {
           currentOptState={displayedStockOpt}
           setCurrentOptState={setDisplayedStockOpt} />
       }
-      {stocksData.data.length < 1 ?
-        <BackgroundInfo infoText={
-          props.boughtStocksPage
-            ? "You haven't bought any stocks yet"
-            : (
-              isSuccess(fetchStatus)
-                ? "There's no stock data to be fetched"
-                : `There has been an error while fetching the news. Status code ${fetchStatus}`
-            )}
-        />
-        :
-        <div role="grid" className="grid">
-          {stocksData.data.map((stock: any) => {
-            return (
-              <StockCard boughtStock={props.boughtStocksPage} key={stock.symbol} symbol={stock.symbol}
-                latestPrice={stock.latestPrice}
-                change={Math.round(stock.change * 100) / 100}
-                boughFor={stock.boughtFor} amount={stock.amount} realtimePrice={realtimePrice} chartData={stocksData.chart === undefined ? [] : stocksData.chart[stock.symbol] || []} />
-            );
-          })}
-        </div>
-      }
+      {stocksData.data.length < 1 && <BackgroundInfo infoText={infoTxt} />}
+      <TransitionGroup className="grid">
+        {stocksData.data.map((stock: any) => (
+          <CSSTransition key={stock.symbol} timeout={200} classNames="fullFade">
+            <StockCard key={stock.symbol} boughtStock={props.boughtStocksPage} symbol={stock.symbol}
+              latestPrice={stock.latestPrice}
+              change={Math.round(stock.change * 100) / 100}
+              boughFor={stock.boughtFor} amount={stock.amount} realtimePrice={realtimePrice} chartData={stocksData.chart === undefined ? [] : stocksData.chart[stock.symbol] || []} />
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
       <span className="copyright">Powered by
         <strong>
           <a href="https://iexcloud.io/" target="_blank" rel="noopener noreferrer"> IEX Cloud</a>
