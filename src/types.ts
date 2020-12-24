@@ -8,7 +8,7 @@ export interface StockProps {
   amount?: number;
 }
 export interface NewsProps {
-  Source: string;
+  PublisherName: string;
   URL: string;
   URLToImage: string;
   Title: string;

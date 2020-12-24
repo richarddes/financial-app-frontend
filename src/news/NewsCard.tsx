@@ -3,9 +3,7 @@ import { useHistory } from "react-router-dom";
 import "./NewsCard.css";
 import { NewsProps } from "../types";
 
-interface NewsCardProps extends NewsProps { };
-
-export default function NewsCard(props: NewsCardProps): JSX.Element {
+export default function NewsCard(props: NewsProps): JSX.Element {
   const history = useHistory();
 
   return (
@@ -20,7 +18,7 @@ export default function NewsCard(props: NewsCardProps): JSX.Element {
       <img alt={props.URLToImage} width="100%" height="auto" src={props.URLToImage} />
       <div className="newsInfo">
         <h5>
-          {props.Source}
+          {props.PublisherName}
           <span style={{ float: "right" }}>
             {props.PublishedAt}
           </span>
